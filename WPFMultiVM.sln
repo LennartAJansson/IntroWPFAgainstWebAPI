@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFMultiVM", "WPFMultiVM\WPFMultiVM.csproj", "{AEB0ACF2-5679-4B8D-AEA2-168C2E12399D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEB0ACF2-5679-4B8D-AEA2-168C2E12399D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEB0ACF2-5679-4B8D-AEA2-168C2E12399D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEB0ACF2-5679-4B8D-AEA2-168C2E12399D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEB0ACF2-5679-4B8D-AEA2-168C2E12399D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {954A4614-B72E-49DD-9834-5140BB0877E0}
+	EndGlobalSection
+EndGlobal
