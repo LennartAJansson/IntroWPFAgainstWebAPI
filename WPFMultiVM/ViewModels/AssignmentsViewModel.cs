@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 using Microsoft.Extensions.Logging;
 
@@ -19,6 +20,8 @@ namespace WPFMultiVM.ViewModels
         {
             this.logger = logger;
             this.service = service;
+            OkCommand = new RelayCommand(async () => await OkCommandAsync());
+            CancelCommand = new RelayCommand(async () => await CancelCommandAsync());
         }
 
         public List<Assignment> Assignments
@@ -45,11 +48,29 @@ namespace WPFMultiVM.ViewModels
 
         private bool visible;
 
+        public RelayCommand OkCommand { get; }
+        public RelayCommand CancelCommand { get; }
+
         internal async Task InitializeAsync()
         {
             //TODO Initialize AssignmentsViewModel
             logger.LogWarning("Initializing");
+            Visible = false;
             Assignments = new List<Assignment>(await service.GetAssignmentsAsync().ConfigureAwait(false));
+        }
+
+        private Task CancelCommandAsync()
+        {
+            Visible = false;
+            return Task.CompletedTask;
+        }
+
+        private Task OkCommandAsync()
+        {
+            //If SelectedAssignment.AssignmentId = 0 then we're saving a new Assignment
+            //Else we're updating an existing one
+            Visible = false;
+            return Task.CompletedTask;
         }
     }
 }

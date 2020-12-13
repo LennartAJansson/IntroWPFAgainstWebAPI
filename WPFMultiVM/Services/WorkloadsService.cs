@@ -20,15 +20,23 @@ namespace WPFMultiVM.Services
             this.client = client;
         }
 
-        public async Task<IEnumerable<Workload>> GetOpenWorkloadsAsync(int personId = 0, int assignmentId = 0)
+        public async Task<IEnumerable<Workload>> GetWorkloadsAsync(int personId = 0, int assignmentId = 0, bool onlyOpen = true)
         {
-            var response = await client.GetAsync($"workloads/{personId}&{assignmentId}").ConfigureAwait(false);
+            string subPath = $"workloads";
+
+            if (onlyOpen)
+                subPath += $"/{personId}&{assignmentId}";
+
+            var response = await client.GetAsync(subPath).ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
 
             string json = await response.Content.ReadAsStringAsync();
-
-            return JsonSerializer.Deserialize<IEnumerable<Workload>>(json);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            return JsonSerializer.Deserialize<IEnumerable<Workload>>(json, options);
         }
     }
 }

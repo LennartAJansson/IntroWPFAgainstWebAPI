@@ -13,5 +13,10 @@ namespace WPFMultiVM.Models
 
         //Browsing property:
         public virtual ICollection<Workload> Workloads { get; set; } = new HashSet<Workload>();
+
+        public override string ToString()
+        {
+            return $"{PersonId} - {Firstname} {Lastname}";
+        }
     }
 }

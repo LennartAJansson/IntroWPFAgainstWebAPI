@@ -12,8 +12,9 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
-        <local:AssignmentsView Grid.Column="1" />
-        <local:PeopleView Grid.Column="1" />
-        <local:WorkloadsView Grid.Column="1" />
+        <!--Panel.ZIndex avgör vilken komponent som ska ligga överst-->
+        <local:WorkloadsView Grid.Column="1" Panel.ZIndex="1" />
+        <local:AssignmentsView Grid.Column="1" Panel.ZIndex="2" />
+        <local:PeopleView Grid.Column="1" Panel.ZIndex="2" />
     </Grid>
 </Window>

@@ -27,8 +27,11 @@ namespace WPFMultiVM.Services
             response.EnsureSuccessStatusCode();
 
             string json = await response.Content.ReadAsStringAsync();
-
-            return JsonSerializer.Deserialize<IEnumerable<Person>>(json);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            return JsonSerializer.Deserialize<IEnumerable<Person>>(json, options);
         }
     }
 }

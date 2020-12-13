@@ -13,6 +13,12 @@
             <Style TargetType="Window">
                 <Setter Property="FontSize" Value="16" />
             </Style>
+            <LinearGradientBrush x:Key="Flat3DBorderBrush" StartPoint="0.499,0" EndPoint="0.501,1">
+                <GradientStop Color="#FFF" Offset="0" />
+                <GradientStop Color="#DDD" Offset="0.01" />
+                <GradientStop Color="#AAA" Offset="0.99" />
+                <GradientStop Color="#888" Offset="1" />
+            </LinearGradientBrush>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
