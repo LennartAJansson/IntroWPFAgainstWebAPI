@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\61447.png" />
+    <None Remove="Views\61456.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Extensions\" />
   </ItemGroup>
 
@@ -15,6 +20,11 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.10" />
     <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="3.1.10" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\61447.png" />
+    <Resource Include="Views\61456.png" />
   </ItemGroup>
 
   <ItemGroup>

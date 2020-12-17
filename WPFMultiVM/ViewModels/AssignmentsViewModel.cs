@@ -59,17 +59,24 @@ namespace WPFMultiVM.ViewModels
             Assignments = new List<Assignment>(await service.GetAssignmentsAsync().ConfigureAwait(false));
         }
 
+        private async Task OkCommandAsync()
+        {
+            if (SelectedAssignment.AssignmentId == 0)
+            {
+                SelectedAssignment = await service.AddAssignmentAsync(SelectedAssignment).ConfigureAwait(false);
+                Assignments.Add(SelectedAssignment);
+            }
+            else
+            {
+                await service.UpdateAssignmentAsync(SelectedAssignment).ConfigureAwait(false);
+            }
+            Visible = false;
+        }
+
         private Task CancelCommandAsync()
         {
             Visible = false;
-            return Task.CompletedTask;
-        }
-
-        private Task OkCommandAsync()
-        {
-            //If SelectedAssignment.AssignmentId = 0 then we're saving a new Assignment
-            //Else we're updating an existing one
-            Visible = false;
+            SelectedAssignment = null;
             return Task.CompletedTask;
         }
     }

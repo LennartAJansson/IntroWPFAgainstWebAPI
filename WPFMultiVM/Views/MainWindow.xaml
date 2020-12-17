@@ -7,14 +7,11 @@
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
+    <Grid Margin="10">
         <!--Panel.ZIndex avgör vilken komponent som ska ligga överst-->
-        <local:WorkloadsView Grid.Column="1" Panel.ZIndex="1" />
-        <local:AssignmentsView Grid.Column="1" Panel.ZIndex="2" />
-        <local:PeopleView Grid.Column="1" Panel.ZIndex="2" />
+        <local:MainView Panel.ZIndex="1" />
+        <local:WorkloadsView Panel.ZIndex="2" />
+        <local:AssignmentsView Panel.ZIndex="3" />
+        <local:PeopleView Panel.ZIndex="3" />
     </Grid>
 </Window>

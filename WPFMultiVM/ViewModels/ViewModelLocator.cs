@@ -6,27 +6,16 @@ namespace WPFMultiVM.ViewModels
 {
     public class ViewModelLocator
     {
-        public MainViewModel MainViewModel
-        {
-            get
-            {
-                return GetMainViewModelAsync().GetAwaiter().GetResult();
-            }
-        }
+        public MainViewModel MainViewModel => GetMainViewModelAsync().GetAwaiter().GetResult();
+        public AssignmentsViewModel AssignmentsViewModel => GetAssignmentsViewModelAsync().GetAwaiter().GetResult();
+        public PeopleViewModel PeopleViewModel => GetPeopleViewModelAsync().GetAwaiter().GetResult();
+        public WorkloadsViewModel WorkloadsViewModel => GetWorkloadsViewModelAsync().GetAwaiter().GetResult();
 
         public static async Task<MainViewModel> GetMainViewModelAsync()
         {
             MainViewModel vm = App.ServiceProvider.GetRequiredService<MainViewModel>();
-            await vm.InitializeAsync();
+            await vm.InitializeAsync().ConfigureAwait(false);
             return vm;
-        }
-
-        public AssignmentsViewModel AssignmentsViewModel
-        {
-            get
-            {
-                return GetAssignmentsViewModelAsync().GetAwaiter().GetResult();
-            }
         }
 
         public static async Task<AssignmentsViewModel> GetAssignmentsViewModelAsync()
@@ -36,27 +25,11 @@ namespace WPFMultiVM.ViewModels
             return vm;
         }
 
-        public PeopleViewModel PeopleViewModel
-        {
-            get
-            {
-                return GetPeopleViewModelAsync().GetAwaiter().GetResult();
-            }
-        }
-
         public static async Task<PeopleViewModel> GetPeopleViewModelAsync()
         {
             PeopleViewModel vm = App.ServiceProvider.GetRequiredService<PeopleViewModel>();
             await vm.InitializeAsync().ConfigureAwait(false);
             return vm;
-        }
-
-        public WorkloadsViewModel WorkloadsViewModel
-        {
-            get
-            {
-                return GetWorkloadsViewModelAsync().GetAwaiter().GetResult();
-            }
         }
 
         public static async Task<WorkloadsViewModel> GetWorkloadsViewModelAsync()

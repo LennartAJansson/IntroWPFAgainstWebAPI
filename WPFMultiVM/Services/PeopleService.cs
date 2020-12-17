@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace WPFMultiVM.Services
 
         public async Task<IEnumerable<Person>> GetPeopleAsync()
         {
+            logger.LogWarning("Getting people");
             var response = await client.GetAsync("people").ConfigureAwait(false);
 
             response.EnsureSuccessStatusCode();
@@ -32,6 +34,33 @@ namespace WPFMultiVM.Services
                 PropertyNameCaseInsensitive = true
             };
             return JsonSerializer.Deserialize<IEnumerable<Person>>(json, options);
+        }
+
+        public async Task<Person> AddPersonAsync(Person person)
+        {
+            string subPath = $"people";
+            string json = JsonSerializer.Serialize(person);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(subPath, content).ConfigureAwait(false);
+
+            response.EnsureSuccessStatusCode();
+
+            json = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            return JsonSerializer.Deserialize<Person>(json, options);
+        }
+
+        public async Task UpdatePersonAsync(Person person)
+        {
+            string subPath = $"people";
+            string json = JsonSerializer.Serialize(person);
+            HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync(subPath, content).ConfigureAwait(false);
+
+            response.EnsureSuccessStatusCode();
         }
     }
 }

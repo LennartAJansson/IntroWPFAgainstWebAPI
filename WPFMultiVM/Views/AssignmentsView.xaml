@@ -11,13 +11,19 @@
              Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
              OpacityMask="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
     <!--Med hjälp av Background och OpacityMask kan man avgöra om komponenten ska vara genomskinlig och vilken färg den ska ha-->
-    <UserControl.Resources>
-    </UserControl.Resources>
     <Border BorderBrush="{StaticResource Flat3DBorderBrush}" BorderThickness="2">
         <StackPanel Orientation="Vertical">
-            <TextBlock Text="AssignmentsView" TextWrapping="Wrap" />
-            <StackPanel Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <TextBlock Text="Customer:" />
+                <TextBox Width="200" Height="22" Text="{Binding SelectedAssignment.Customer}"></TextBox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <TextBlock Text="Description:" />
+                <TextBox Width="200" Height="22" Text="{Binding SelectedAssignment.Description}"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10">
                 <Button Command="{Binding OkCommand}" Content="Ok" Width="32" IsDefault="True" />
+                <Separator Margin="4,0" />
                 <Button Command="{Binding CancelCommand}" Content="Cancel" Width="32" IsCancel="True" />
             </StackPanel>
         </StackPanel>

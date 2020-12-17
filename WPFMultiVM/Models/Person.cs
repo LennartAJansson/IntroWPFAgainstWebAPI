@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WPFMultiVM.Models
 {
@@ -12,11 +13,9 @@ namespace WPFMultiVM.Models
         public string Phone { get; set; }
 
         //Browsing property:
+        [JsonIgnore]
         public virtual ICollection<Workload> Workloads { get; set; } = new HashSet<Workload>();
 
-        public override string ToString()
-        {
-            return $"{PersonId} - {Firstname} {Lastname}";
-        }
+        public override string ToString() => $"{PersonId} - {Firstname} {Lastname}";
     }
 }

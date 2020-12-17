@@ -58,17 +58,24 @@ namespace WPFMultiVM.ViewModels
             People = new List<Person>(await service.GetPeopleAsync().ConfigureAwait(false));
         }
 
+        private async Task OkCommandAsync()
+        {
+            if (SelectedPerson.PersonId == 0)
+            {
+                SelectedPerson = await service.AddPersonAsync(SelectedPerson).ConfigureAwait(false);
+                People.Add(SelectedPerson);
+            }
+            else
+            {
+                await service.UpdatePersonAsync(SelectedPerson).ConfigureAwait(false);
+            }
+            Visible = false;
+        }
+
         private Task CancelCommandAsync()
         {
             Visible = false;
-            return Task.CompletedTask;
-        }
-
-        private Task OkCommandAsync()
-        {
-            //If SelectedPerson.PersonId = 0 then we're saving a new Person
-            //Else we're updating an existing one
-            Visible = false;
+            SelectedPerson = null;
             return Task.CompletedTask;
         }
     }

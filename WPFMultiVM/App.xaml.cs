@@ -25,15 +25,12 @@ namespace WPFMultiVM
         public App()
         {
             host = Host.CreateDefaultBuilder()
-                .ConfigureLogging(logging =>
+                .ConfigureLogging(logging => logging.AddEventLog(eventLogSettings =>
                 {
-                    logging.AddEventLog(eventLogSettings =>
-                    {
-                        eventLogSettings.LogName = "Application"; //Default is Application
-                        //eventLogSettings.MachineName = "MyComputer"; //Default is env:ComputerName
-                        eventLogSettings.SourceName = "WPFMultiVM"; //Default is ".NET Runtime"
-                    });
-                })
+                    eventLogSettings.LogName = "Application"; //Default is Application
+                    //eventLogSettings.MachineName = "MyComputer"; //Default is env:ComputerName
+                    eventLogSettings.SourceName = "WPFMultiVM"; //Default is ".NET Runtime"
+                }))
                 .ConfigureServices((hostContext, services) =>
                 {
                     //services.AddTransient<IAssignmentsService, AssignmentsService>();
@@ -64,6 +61,7 @@ namespace WPFMultiVM
             client.BaseAddress = new Uri(options.BaseAddress);
             client.DefaultRequestHeaders.Add("Accept", options.Accept);
             client.DefaultRequestHeaders.Add("User-Agent", options.UserAgent);
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Connection.AccessToken);
         }
 
         protected override async void OnStartup(StartupEventArgs e)

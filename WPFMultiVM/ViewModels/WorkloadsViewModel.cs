@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 
 using Microsoft.Extensions.Logging;
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,18 +16,18 @@ namespace WPFMultiVM.ViewModels
     {
         private readonly ILogger<WorkloadsViewModel> logger;
         private readonly WorkloadsService service;
+        private readonly PeopleService peopleService;
+        private readonly AssignmentsService assignmentsService;
         private readonly PeopleViewModel peopleVm;
         private readonly AssignmentsViewModel assignmentsVm;
 
-        public WorkloadsViewModel(ILogger<WorkloadsViewModel> logger, WorkloadsService service, PeopleViewModel peopleVm, AssignmentsViewModel assignmentsVm)
+        public bool Visible
         {
-            this.logger = logger;
-            this.service = service;
-            this.peopleVm = peopleVm;
-            this.assignmentsVm = assignmentsVm;
-            PeopleCommand = new RelayCommand<string>(async (string p) => await PeopleCommandAsync(p));
-            AssignmentCommand = new RelayCommand<string>(async (string p) => await AssignmentCommandAsync(p));
+            get => visible;
+            set => Set(nameof(Visible), ref visible, value, true);
         }
+
+        private bool visible;
 
         public List<Workload> Workloads
         {
@@ -44,44 +45,108 @@ namespace WPFMultiVM.ViewModels
 
         private Workload selectedWorkload;
 
-        public bool Visible
+        public List<Person> People
         {
-            get => visible;
-            set => Set(nameof(Visible), ref visible, value, true);
+            get => people;
+            set => Set(nameof(People), ref people, value, true);
         }
 
-        private bool visible;
+        private List<Person> people;
 
-        public RelayCommand<string> PeopleCommand { get; }
-        public RelayCommand<string> AssignmentCommand { get; }
+        public List<Assignment> Assignments
+        {
+            get => assignments;
+            set => Set(nameof(Assignments), ref assignments, value, true);
+        }
+
+        private List<Assignment> assignments;
+
+        public RelayCommand AddPersonCommand { get; }
+        public RelayCommand AddAssignmentCommand { get; }
+        public RelayCommand EditPersonCommand { get; }
+        public RelayCommand EditAssignmentCommand { get; }
+        public RelayCommand AddCurrentDateTimeCommand { get; }
+        public RelayCommand OkCommand { get; }
+        public RelayCommand CancelCommand { get; }
+
+        public WorkloadsViewModel(ILogger<WorkloadsViewModel> logger,
+                                  WorkloadsService service, PeopleService peopleService, AssignmentsService assignmentsService,
+                                  PeopleViewModel peopleVm, AssignmentsViewModel assignmentsVm)
+        {
+            this.logger = logger;
+            this.service = service;
+            this.peopleService = peopleService;
+            this.assignmentsService = assignmentsService;
+            this.peopleVm = peopleVm;
+            this.assignmentsVm = assignmentsVm;
+            AddPersonCommand = new RelayCommand(async () => await AddPersonCommandAsync());
+            AddAssignmentCommand = new RelayCommand(async () => await AddAssignmentCommandAsync());
+            EditPersonCommand = new RelayCommand(async () => await EditPersonCommandAsync());
+            EditAssignmentCommand = new RelayCommand(async () => await EditAssignmentCommandAsync());
+            AddCurrentDateTimeCommand = new RelayCommand(async () => await AddCurrentDateTimeCommandAsync());
+            OkCommand = new RelayCommand(async () => await OkCommandAsync());
+            CancelCommand = new RelayCommand(async () => await CancelCommandAsync());
+        }
 
         internal async Task InitializeAsync()
         {
-            //TODO Initialize WorkloadsViewModel
             logger.LogWarning("Initializing");
-            Visible = true;
-            Workloads = new List<Workload>(await service.GetWorkloadsAsync().ConfigureAwait(false));
+            Visible = false;
+            People = new List<Person>(await peopleService.GetPeopleAsync().ConfigureAwait(false));
+            Assignments = new List<Assignment>(await assignmentsService.GetAssignmentsAsync().ConfigureAwait(false));
         }
 
-        private Task PeopleCommandAsync(string parameter)
+        private async Task AddPersonCommandAsync()
         {
-            if (parameter == "new")
-                peopleVm.SelectedPerson = new Person();
-            else if (parameter == "edit")
-                peopleVm.SelectedPerson = SelectedWorkload.Person;
+            SelectedWorkload.Person = new Person();
+            await EditPersonCommandAsync();
+        }
 
+        private async Task AddAssignmentCommandAsync()
+        {
+            SelectedWorkload.Assignment = new Assignment();
+            await EditAssignmentCommandAsync();
+        }
+
+        private Task EditPersonCommandAsync()
+        {
+            peopleVm.SelectedPerson = SelectedWorkload.Person;
             peopleVm.Visible = true;
             return Task.CompletedTask;
         }
 
-        private Task AssignmentCommandAsync(string parameter)
+        private Task EditAssignmentCommandAsync()
         {
-            if (parameter == "new")
-                assignmentsVm.SelectedAssignment = new Assignment();
-            else if (parameter == "edit")
-                assignmentsVm.SelectedAssignment = SelectedWorkload.Assignment;
-
+            assignmentsVm.SelectedAssignment = SelectedWorkload.Assignment;
             assignmentsVm.Visible = true;
+            return Task.CompletedTask;
+        }
+
+        private Task AddCurrentDateTimeCommandAsync()
+        {
+            SelectedWorkload.Start = DateTime.Now;
+            RaisePropertyChanged(nameof(SelectedWorkload));
+            return Task.CompletedTask;
+        }
+
+        private async Task OkCommandAsync()
+        {
+            if (SelectedWorkload.WorkloadId == 0)
+            {
+                SelectedWorkload = await service.AddWorkloadAsync(SelectedWorkload).ConfigureAwait(false);
+                Workloads.Add(SelectedWorkload);
+            }
+            else
+            {
+                await service.UpdateWorkloadAsync(SelectedWorkload).ConfigureAwait(false);
+            }
+            Visible = false;
+        }
+
+        private Task CancelCommandAsync()
+        {
+            Visible = false;
+            SelectedWorkload = null;
             return Task.CompletedTask;
         }
     }
